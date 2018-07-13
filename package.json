@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "axe-core": "~2.5.0",
+    "axe-cli": "~1.0.0",
+    "random-string": "~0.2.0"
+  }
+}
