@@ -17,7 +17,7 @@ The simplest way to deploy this is using the [Serverless framework](https://serv
 
 Once installed, just deploy it with `serverless deploy -v` and check the logs after that with `serverless logs -f a11yCheck -t`.
 
-## Limitations
+## Limitations
 
 The function is fired after an API Gateway HTTP endpoint request is made. This imposes a timeout of 30 seconds, and there are cases where the axe-core check could take longer.
 
