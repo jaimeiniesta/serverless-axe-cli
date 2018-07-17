@@ -1,7 +1,10 @@
 {
   "dependencies": {
-    "axe-core": "~2.5.0",
-    "axe-cli": "~1.0.0",
-    "random-string": "~0.2.0"
+    "axe-core": "3.0.3",
+    "axe-webdriverjs": "^2.0.1",
+    "selenium-webdriver": "^3.6.0"
+  },
+  "devDependencies": {
+    "serverless-plugin-chrome": "^1.0.0-50"
   }
 }

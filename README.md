@@ -1,11 +1,11 @@
 # Serverless-Axe-Cli
 
-AWS Lambda function to check a11y using axe-cli.
+AWS Lambda function to check a11y using axe-webdriverjs.
 
 ## Introduction
 
 This repo contains an example of a AWS Lambda functions that accepts an URL and
-checks its A11Y using axe-core 2.5.0 with phantomjs, through axe-cli.
+checks its A11Y using axe-core 3.0.0 with headless chrome, through axe-webdriverjs.
 
 ## Deploy
 
