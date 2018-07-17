@@ -1,53 +1,46 @@
-'use strict';
+'use strict'
 
-console.log('Loading function');
+console.log('Loading function')
 
 module.exports.a11yCheck = (event, context, callback) => {
-  var url = event.queryStringParameters.url;
-  var outputFileName = randomFileName();
-  var cmd = './node_modules/axe-cli/axe-cli ' + url + ' --save ' + outputFileName + ' -d /tmp';
-  console.log('Command to execute: ' + cmd);
+  var url = event.queryStringParameters.url
+  console.log("Let's check " + url)
 
-  var exec = require('child_process').exec;
+  const wd     = require('selenium-webdriver')
+  const chrome = require('selenium-webdriver/chrome')
+  const Axe    = require('axe-webdriverjs')
 
-  // https://github.com/SaschaGalley/grunt-phpunit/issues/29
-  // default buffer is 200 * 1024, so we set up a higher limit for the JSON output
-  var maxBuffer = 100000 * 1024;
+  // Build a Chrome service, ensuring the correct path to ChromeDriver is set
+  const service = new chrome.ServiceBuilder(
+    '/var/task/node_modules/@serverless-chrome/lambda/dist/headless-chromium'
+  ).build()
 
-  exec(cmd, { maxBuffer: maxBuffer }, function(error, stdout, stderr) {
-    if (error) { console.log(error); }
-    console.log(stdout);
+  chrome.setDefaultService(service)
 
-    // Read contents of file in outputFileName and return that.
-    exec('cat /tmp/' + outputFileName, { maxBuffer: maxBuffer }, function(error, stdout, stderr) {
-      if (error) {
-        console.log("error reading results")
-      } else {
-        console.log("OK reading results")
+  // Create our WebDriver instance
+  const webdriver = new wd.Builder()
+    .forBrowser('chrome')
+    .withCapabilities(wd.Capabilities.chrome())
+    .build()
 
-        // BEGIN HTTP Response
-        const response = {
-          statusCode: 200,
-          body: stdout,
-        };
+  const axe = new Axe(webdriver)
 
-        callback(null, response);
-        // END HTTP Response
+  // Get the page
+  webdriver.get(url).then(() => {
+    // Run axe-core
+    axe.analyze(results => {
+      console.log(results)
+
+      // BEGIN HTTP Response
+      const response = {
+        statusCode: 200,
+        body: results,
       }
-    })
 
-    // Delete temporary file
-    exec('rm /tmp/' + outputFileName, function(error, stdout, stderr) {
-      if (error) { console.log(error);  }
-      console.log(stdout);
-    });
-  });
-};
-
-// Returns a random file name to save the results in a file
-function randomFileName() {
-  var randomString = require('random-string');
-  var seconds      = new Date().getTime();
-
-  return(randomString({length: 50}) + seconds + ".json");
+      callback(null, response)
+      // END HTTP Response
+    })
+  }).catch(err => {
+    console.log(err)
+  })
 }

@@ -5,7 +5,17 @@ AWS Lambda function to check a11y using axe-cli.
 ## Introduction
 
 This repo contains an example of a AWS Lambda functions that accepts an URL and
-checks its A11Y using axe-core 2.5.0 with phantomjs, through axe-cli.
+checks its A11Y using axe-core 3.0.0 with headless chrome, through axe-cli.
+
+## Docker
+
+We use Docker to run `npm install` in an AWS-like environment. Build the container with:
+
+`docker-compose build`
+
+Then you can SSH into it with:
+
+`docker-compose run --rm aws-box bash`
 
 ## Deploy
 

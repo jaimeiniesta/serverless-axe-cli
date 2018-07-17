@@ -56,6 +56,9 @@ provider:
 #    - exclude-me.js
 #    - exclude-me-dir/**
 
+plugins:
+  - serverless-plugin-chrome
+
 functions:
   a11yCheck:
     handler: handler.a11yCheck
